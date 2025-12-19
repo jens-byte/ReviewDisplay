@@ -704,8 +704,7 @@ function ReviewCard({
   return (
     <div style={{
       flexShrink: 0,
-      width: config.show_avatar ? "auto" : 280,
-      minWidth: 280,
+      width: 280,
       background: isDark ? "#2d2d2d" : "#fff",
       border: `1px solid ${isDark ? "#3c4043" : "#e8eaed"}`,
       borderRadius: 8,
