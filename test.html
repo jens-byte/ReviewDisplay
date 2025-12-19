@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review Widget Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #f5f5f5;
+    }
+    h1 { color: #333; }
+    .widget-container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin: 20px 0;
+    }
+    p { color: #666; line-height: 1.6; }
+    code {
+      background: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Review Widget Test Page</h1>
+  <p>This page demonstrates the embedded review widget. To test:</p>
+  <ol>
+    <li>Start the server: <code>bun run dev</code></li>
+    <li>Open the dashboard: <code>http://localhost:3000/dashboard</code></li>
+    <li>Create a widget with a Google Place ID</li>
+    <li>Copy the embed code and replace the widget below</li>
+  </ol>
+
+  <h2>Widget Preview</h2>
+  <div class="widget-container">
+    <!-- Replace WIDGET_ID with your actual widget ID from the dashboard -->
+    <div id="review-widget" data-widget-id="WIDGET_ID"></div>
+    <script src="http://localhost:3000/embed/WIDGET_ID.js"></script>
+  </div>
+
+  <p><em>Note: The widget will show "Widget not found" until you replace WIDGET_ID with an actual widget ID.</em></p>
+</body>
+</html>
