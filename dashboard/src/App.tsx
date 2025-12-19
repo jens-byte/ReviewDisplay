@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
 const API_URL = import.meta.env.DEV ? "http://localhost:3000" : "";
@@ -533,6 +533,78 @@ function Summary({ rating, totalReviews, theme }: { rating: number; totalReviews
   );
 }
 
+function CarouselPreview({
+  reviews,
+  config,
+  avgRating,
+  totalReviews,
+}: {
+  reviews: Review[];
+  config: { theme: string; show_avatar: boolean; show_date: boolean; show_rating: boolean };
+  avgRating: number;
+  totalReviews: number;
+}) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateScrollButtons = () => {
+    if (!trackRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = trackRef.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+  };
+
+  useEffect(() => {
+    updateScrollButtons();
+  }, [reviews]);
+
+  const scroll = (direction: "left" | "right") => {
+    if (!trackRef.current) return;
+    const scrollAmount = 300;
+    trackRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+    setTimeout(updateScrollButtons, 300);
+  };
+
+  return (
+    <div className="preview-carousel">
+      <Summary rating={avgRating} totalReviews={totalReviews} theme={config.theme} />
+      <button
+        className="carousel-nav carousel-nav-prev"
+        onClick={() => scroll("left")}
+        style={{ opacity: canScrollLeft ? 1 : 0.3 }}
+        disabled={!canScrollLeft}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <div
+        ref={trackRef}
+        className="preview-carousel-track"
+        onScroll={updateScrollButtons}
+      >
+        {reviews.map((review) => (
+          <ReviewCard key={review.id} review={review} config={config} />
+        ))}
+      </div>
+      <button
+        className="carousel-nav carousel-nav-next"
+        onClick={() => scroll("right")}
+        style={{ opacity: canScrollRight ? 1 : 0.3 }}
+        disabled={!canScrollRight}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M9 18l6-6-6-6" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
 function WidgetPreview({
   reviews,
   config,
@@ -585,12 +657,12 @@ function WidgetPreview({
 
   if (config.layout === "carousel") {
     return (
-      <div className="preview-carousel">
-        <Summary rating={avgRating} totalReviews={totalReviews} theme={config.theme} />
-        <div className="preview-carousel-track">
-          {reviewCards}
-        </div>
-      </div>
+      <CarouselPreview
+        reviews={reviews}
+        config={config}
+        avgRating={avgRating}
+        totalReviews={totalReviews}
+      />
     );
   }
 
