@@ -29,8 +29,9 @@ app.route("/api/reviews", reviews);
 app.route("/embed", embed);
 
 // Serve dashboard static files in production
-app.use("/dashboard/*", serveStatic({ root: "./dashboard/dist" }));
 app.get("/dashboard", serveStatic({ path: "./dashboard/dist/index.html" }));
+app.get("/dashboard/", serveStatic({ path: "./dashboard/dist/index.html" }));
+app.use("/dashboard/*", serveStatic({ root: "./dashboard/dist", rewriteRequestPath: (path) => path.replace(/^\/dashboard/, "") }));
 
 // Health check
 app.get("/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));
