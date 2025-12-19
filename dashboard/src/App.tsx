@@ -224,8 +224,11 @@ function WidgetEditor({
     try {
       const res = await fetch(`${API_URL}/api/reviews/${form.place_id}`);
       const data = await res.json();
-      if (data.reviews) {
+      if (data.reviews && data.reviews.length > 0) {
         setReviews(data.reviews.slice(0, form.max_reviews));
+      } else {
+        // API returned error or no reviews, use mock data
+        setReviews(getMockReviews());
       }
     } catch {
       // Preview failed, use mock data
