@@ -451,20 +451,30 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .preview-carousel-track {
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 8px 4px;
   flex: 1;
+  min-width: 0;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
 }
 
 .preview-carousel-track::-webkit-scrollbar {
   display: none;
+}
+
+.preview-carousel-track > * {
+  flex-shrink: 0;
+  scroll-snap-align: start;
 }
 
 .preview-summary {
