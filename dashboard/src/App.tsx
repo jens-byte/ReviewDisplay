@@ -517,12 +517,7 @@ function Stars({ rating, size = 18 }: { rating: number; size?: number }) {
 function Summary({ rating, totalReviews, theme }: { rating: number; totalReviews: number; theme: string }) {
   const isDark = theme === "dark";
   return (
-    <div style={{
-      textAlign: "center",
-      padding: "20px 24px",
-      minWidth: 140,
-      color: isDark ? "#e8e8e8" : "#3c4043",
-    }}>
+    <div className="preview-summary" style={{ color: isDark ? "#e8e8e8" : "#3c4043" }}>
       <div style={{ fontSize: 22, marginBottom: 8 }}>{rating.toFixed(1)} stars</div>
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
         <Stars rating={Math.round(rating)} size={24} />
@@ -590,9 +585,9 @@ function WidgetPreview({
 
   if (config.layout === "carousel") {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+      <div className="preview-carousel">
         <Summary rating={avgRating} totalReviews={totalReviews} theme={config.theme} />
-        <div style={{ display: "flex", gap: 16, overflowX: "auto", paddingBottom: 8, flex: 1 }}>
+        <div className="preview-carousel-track">
           {reviewCards}
         </div>
       </div>

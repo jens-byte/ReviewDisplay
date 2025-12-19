@@ -445,3 +445,41 @@
     transform: rotate(360deg);
   }
 }
+
+/* Widget Preview - Carousel */
+.preview-carousel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.preview-carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  flex: 1;
+}
+
+.preview-summary {
+  flex-shrink: 0;
+  text-align: center;
+  padding: 20px 24px;
+  min-width: 140px;
+}
+
+@media (max-width: 768px) {
+  .preview-carousel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .preview-summary {
+    padding: 16px;
+    min-width: auto;
+  }
+
+  .preview-carousel-track {
+    padding: 0 0 8px 0;
+  }
+}
