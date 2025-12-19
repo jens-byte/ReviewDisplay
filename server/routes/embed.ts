@@ -26,6 +26,7 @@ embed.get("/data/:widgetId", async (c) => {
         id: widget.id,
         theme: widget.theme,
         layout: widget.layout,
+        visible_cards: widget.visible_cards || 2,
         show_avatar: Boolean(widget.show_avatar),
         show_date: Boolean(widget.show_date),
         show_rating: Boolean(widget.show_rating),
@@ -103,7 +104,7 @@ function generateWidgetScript(widgetId: string, baseUrl: string): string {
     if (!document.getElementById('rw-styles')) {
       const style = document.createElement('style');
       style.id = 'rw-styles';
-      style.textContent = getStyles(widget.theme);
+      style.textContent = getStyles(widget.theme, widget.visible_cards || 2);
       document.head.appendChild(style);
     }
 
@@ -277,7 +278,7 @@ function generateWidgetScript(widgetId: string, baseUrl: string): string {
     updateButtons();
   }
 
-  function getStyles(theme) {
+  function getStyles(theme, visibleCards) {
     const isDark = theme === 'dark';
     const bg = isDark ? '#1f1f1f' : '#ffffff';
     const cardBg = isDark ? '#2d2d2d' : '#ffffff';
@@ -285,6 +286,9 @@ function generateWidgetScript(widgetId: string, baseUrl: string): string {
     const textMuted = isDark ? '#9aa0a6' : '#70757a';
     const border = isDark ? '#3c4043' : '#e8eaed';
     const shadow = isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)';
+    const cardWidth = 280;
+    const gap = 16;
+    const trackMaxWidth = (cardWidth * visibleCards) + (gap * (visibleCards - 1)) + 20;
 
     return \`
       .rw-loading, .rw-error {
@@ -373,7 +377,7 @@ function generateWidgetScript(widgetId: string, baseUrl: string): string {
         scrollbar-width: none;
         -ms-overflow-style: none;
         padding: 8px 4px;
-        flex: 1;
+        max-width: \${trackMaxWidth}px;
       }
       .rw-track::-webkit-scrollbar { display: none; }
 

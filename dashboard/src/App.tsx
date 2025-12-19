@@ -11,6 +11,7 @@ interface Widget {
   layout: "badge" | "carousel" | "grid" | "list";
   max_reviews: number;
   min_rating: number;
+  visible_cards: number;
   show_avatar: boolean;
   show_date: boolean;
   show_rating: boolean;
@@ -207,6 +208,7 @@ function WidgetEditor({
     layout: widget?.layout || "carousel",
     max_reviews: widget?.max_reviews || 5,
     min_rating: widget?.min_rating || 4,
+    visible_cards: widget?.visible_cards || 2,
     show_avatar: widget?.show_avatar ?? true,
     show_date: widget?.show_date ?? true,
     show_rating: widget?.show_rating ?? true,
@@ -396,6 +398,25 @@ function WidgetEditor({
               </div>
             </div>
 
+            {form.layout === "carousel" && (
+              <div className="form-group">
+                <label>Visible Cards</label>
+                <select
+                  value={form.visible_cards}
+                  onChange={(e) =>
+                    setForm({ ...form, visible_cards: parseInt(e.target.value) })
+                  }
+                >
+                  {[1, 2, 3, 4].map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+                <p className="form-hint">Number of review cards visible at once in the carousel</p>
+              </div>
+            )}
+
             <div className="form-group">
               <label>Display Options</label>
               <Toggle
@@ -540,13 +561,18 @@ function CarouselPreview({
   totalReviews,
 }: {
   reviews: Review[];
-  config: { theme: string; show_avatar: boolean; show_date: boolean; show_rating: boolean };
+  config: { theme: string; show_avatar: boolean; show_date: boolean; show_rating: boolean; visible_cards?: number };
   avgRating: number;
   totalReviews: number;
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const visibleCards = config.visible_cards || 2;
+  const cardWidth = 280;
+  const gap = 16;
+  const trackMaxWidth = (cardWidth * visibleCards) + (gap * (visibleCards - 1)) + 20;
 
   const updateScrollButtons = () => {
     if (!trackRef.current) return;
@@ -585,6 +611,7 @@ function CarouselPreview({
       <div
         ref={trackRef}
         className="preview-carousel-track"
+        style={{ maxWidth: trackMaxWidth }}
         onScroll={updateScrollButtons}
       >
         {reviews.map((review) => (
@@ -613,6 +640,7 @@ function WidgetPreview({
   config: {
     theme: string;
     layout: string;
+    visible_cards?: number;
     show_avatar: boolean;
     show_date: boolean;
     show_rating: boolean;

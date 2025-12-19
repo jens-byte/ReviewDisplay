@@ -14,6 +14,7 @@ db.run(`
     layout TEXT DEFAULT 'carousel',
     max_reviews INTEGER DEFAULT 5,
     min_rating INTEGER DEFAULT 4,
+    visible_cards INTEGER DEFAULT 2,
     show_avatar INTEGER DEFAULT 1,
     show_date INTEGER DEFAULT 1,
     show_rating INTEGER DEFAULT 1,
@@ -22,6 +23,13 @@ db.run(`
     updated_at TEXT DEFAULT (datetime('now'))
   )
 `);
+
+// Add visible_cards column if it doesn't exist (migration for existing DBs)
+try {
+  db.run(`ALTER TABLE widgets ADD COLUMN visible_cards INTEGER DEFAULT 2`);
+} catch {
+  // Column already exists
+}
 
 db.run(`
   CREATE TABLE IF NOT EXISTS reviews (
@@ -49,6 +57,7 @@ export interface Widget {
   layout: "badge" | "carousel" | "grid" | "list";
   max_reviews: number;
   min_rating: number;
+  visible_cards: number;
   show_avatar: boolean;
   show_date: boolean;
   show_rating: boolean;
@@ -72,8 +81,8 @@ export interface Review {
 // Widget queries
 export const widgetQueries = {
   create: db.prepare(`
-    INSERT INTO widgets (id, place_id, name, theme, layout, max_reviews, min_rating, show_avatar, show_date, show_rating, custom_css)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO widgets (id, place_id, name, theme, layout, max_reviews, min_rating, visible_cards, show_avatar, show_date, show_rating, custom_css)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `),
 
   getById: db.prepare(`SELECT * FROM widgets WHERE id = ?`),
@@ -82,7 +91,7 @@ export const widgetQueries = {
 
   update: db.prepare(`
     UPDATE widgets
-    SET place_id = ?, name = ?, theme = ?, layout = ?, max_reviews = ?, min_rating = ?,
+    SET place_id = ?, name = ?, theme = ?, layout = ?, max_reviews = ?, min_rating = ?, visible_cards = ?,
         show_avatar = ?, show_date = ?, show_rating = ?, custom_css = ?, updated_at = datetime('now')
     WHERE id = ?
   `),
