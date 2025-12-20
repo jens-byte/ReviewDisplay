@@ -254,6 +254,7 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 20px;
+  overflow-x: auto;
 }
 
 .preview-panel h2 {
@@ -509,22 +510,42 @@
   cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .preview-carousel {
-    flex-direction: column;
-    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .preview-summary {
     padding: 16px;
     min-width: auto;
+    width: 100%;
   }
 
   .preview-carousel-track {
-    padding: 0 0 8px 0;
+    order: 1;
+    width: 100%;
+    padding: 8px 0;
   }
 
   .carousel-nav {
-    display: none;
+    order: 2;
+    margin-top: 12px;
+  }
+
+  .carousel-nav:first-of-type {
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .preview-carousel-track > * {
+    min-width: 260px;
+    width: 260px;
+  }
+
+  .carousel-nav {
+    width: 36px;
+    height: 36px;
   }
 }
