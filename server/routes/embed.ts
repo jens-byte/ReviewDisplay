@@ -46,8 +46,15 @@ embed.get("/data/:widgetId", async (c) => {
 });
 
 // Serve embeddable widget script
-embed.get("/:widgetId.js", async (c) => {
-  const widgetId = c.req.param("widgetId");
+embed.get("/:file", async (c) => {
+  const file = c.req.param("file");
+
+  // Only handle .js files
+  if (!file.endsWith(".js")) {
+    return c.text("Not found", 404);
+  }
+
+  const widgetId = file.replace(".js", "");
   const widget = widgetQueries.getById.get(widgetId) as Widget | null;
 
   if (!widget) {
