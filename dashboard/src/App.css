@@ -520,21 +520,21 @@
     padding: 16px;
     min-width: auto;
     width: 100%;
+    order: 0;
+  }
+
+  .carousel-nav-prev {
+    order: 1;
   }
 
   .preview-carousel-track {
-    order: 1;
-    width: 100%;
+    order: 2;
+    width: calc(100% - 100px);
     padding: 8px 0;
   }
 
-  .carousel-nav {
-    order: 2;
-    margin-top: 12px;
-  }
-
-  .carousel-nav:first-of-type {
-    margin-right: 8px;
+  .carousel-nav-next {
+    order: 3;
   }
 }
 
