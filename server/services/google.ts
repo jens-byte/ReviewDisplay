@@ -72,6 +72,7 @@ export async function fetchGoogleReviews(placeId: string): Promise<PlaceInfo> {
   const url = new URL("https://maps.googleapis.com/maps/api/place/details/json");
   url.searchParams.set("place_id", placeId);
   url.searchParams.set("fields", "name,rating,user_ratings_total,reviews");
+  url.searchParams.set("reviews_no_translations", "true");
   url.searchParams.set("key", GOOGLE_API_KEY);
 
   const response = await fetch(url.toString());
